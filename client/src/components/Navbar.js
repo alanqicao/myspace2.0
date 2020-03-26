@@ -1,15 +1,19 @@
-import React from 'react'
-import { AuthConsumer, } from "../providers/AuthProvider";
+import React, {useContext,} from 'react'
+import { AuthContext, } from "../providers/AuthProvider";
 import { Menu, Icon, } from 'semantic-ui-react'
 import { Link, withRouter, } from 'react-router-dom'
+import { useWindowWidth } from "../hooks/useWindowWidth"
 
 
-class Navbar extends React.Component {
+const Navbar = (props) => {
   
-  rightNavItems = () => {
-    const { auth: { user, handleLogout, }, location, } = this.props;
+  const auth = useContext(AuthContext);
+  const width = useWindowWidth();
+
+  const rightNavItems = () => {
+    const { location, history} = props;
     
-    if (user) {
+    if (auth.user) {
       return (
         <Menu inverted vertical style={{height: "100"}}>
            <h3 style={{color: "white" }}><Icon name="users" size="big" inverted color="white"/>myspace</h3>
@@ -33,7 +37,7 @@ class Navbar extends React.Component {
             </Link>
           <Menu.Item
             name='logout'
-            onClick={ () => handleLogout(this.props.history) }
+            onClick={ () => auth.handleLogout(history) }
           />
         </Menu>
       )
@@ -68,7 +72,6 @@ class Navbar extends React.Component {
     }
   }
   
-  render() {
     return (
       <>
         <Menu inverted vertical>
@@ -79,24 +82,11 @@ class Navbar extends React.Component {
               active={this.props.location.pathname === '/'}
             />
           </Link> */}
-            { this.rightNavItems() }
+            { rightNavItems() }
         </Menu>
       </>
     )
-  }
+  
 }
 
-export class ConnectedNavbar extends React.Component {
-  render() {
-    return (
-      <AuthConsumer> 
-        { auth => 
-          <Navbar { ...this.props } auth={auth} />
-        }
-      </AuthConsumer>
-    )
-  }
-}
-
-
-export default withRouter(ConnectedNavbar);
+export default withRouter(Navbar);

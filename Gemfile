@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.0'
+ruby '2.5.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
@@ -27,6 +27,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem "devise_token_auth"
 
 group :development, :test do
+  gem 'pry'
 gem "faker", :git => "https://github.com/stympy/faker.git", :branch => "master"
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

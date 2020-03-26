@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
   serialize :friend_profiles, Array
+  has_many :profiles
 
 def self.random_profile(ids)
  ids = ids.empty? ? [0] : ids

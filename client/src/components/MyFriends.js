@@ -1,41 +1,53 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import axios from 'axios';
-import { Card, Divider, Image, } from 'semantic-ui-react';
+import { Card, Divider, Image,Segment, List, Header, Button } from 'semantic-ui-react';
 
-class MyFriends extends React.Component {
-  state = { friends: [], };
 
-  componentDidMount() {
-    axios.get('/api/my_friends')
-      .then( res => this.setState({ friends: res.data, }) );
-  }
+const MyFriends = props => {
+  const [profiles, setProfiles] = useState([]);
+  
 
-  render() {
-    const { friends, } = this.state;
-    return (
-      <div id="wrap">
-      <Card.Group itemsPerRow={4}>
-        { friends.map( friend =>
-          <Card key={friend.id}>
-            <Image src={friend.avatar} />
+  useEffect( () => {
+    axios
+      .get('/api/profiles') 
+      .then(res => {
+        setProfiles(res.data);
+        
+      })
+      .catch(e => {
+        console.log(e)
+      });
+  }, []);
+   
+    const renderFriends =() =>{
+        return profiles.map(profile =>(
+          <Card key={profile.id}>
+            <Image src={profile.avatar} />
             <Card.Content>
               <Divider />
               <Card.Header>
-                { friend.username }
+                { profile.username }
               </Card.Header>
               <Card.Meta>
-                { `${friend.age}  ${friend.gender}` }
+                { `${profile.age}  ${profile.gender}` }
               </Card.Meta>
               <Card.Description>
-                { friend.description }
+                { profile.description }
               </Card.Description>
             </Card.Content>
           </Card>
-        )}
-      </Card.Group>
-      </div>
-    )
-  }
+        ) )
+    }
 
+    return (
+      <Segment>
+        <div id="wrap">
+          <Header as ="h1">My friends</Header>
+          <br />
+         
+          <Card>{renderFriends()}</Card>
+        </div>
+      </Segment>
+    )
 }
 export default MyFriends;
